@@ -13,10 +13,7 @@ connectDB();
 const app = express();
 
 app.use(express.json()); // to accept json data
-
-// app.get("/", (req, res) => {
-//   res.send("API Running!");
-// });
+app.use(cors())
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
@@ -49,12 +46,11 @@ const server = app.listen(
     console.log(`Server running on PORT ${PORT}...`.yellow.bold)
 );
 
-const io = require("socket.io")(server, {
-    pingTimeout: 60000,
-    cors: {
-        origin: "https://front-end-chat-app-opal.vercel.app/",
-        // credentials: true,
-    },
+const io = require('socket.io')(server)
+
+io.use((socket, next) => {
+    socket.request.headers.origin = 'https://front-end-chat-app-ngocnamk3er-gmailcom.vercel.app'; // Thay thế bằng nguồn (origin) mà bạn muốn cho phép truy cập
+    next();
 });
 
 io.on("connection", (socket) => {
