@@ -46,11 +46,12 @@ const server = app.listen(
     console.log(`Server running on PORT ${PORT}...`.yellow.bold)
 );
 
-const io = require('socket.io')(server)
-
-io.use((socket, next) => {
-    socket.request.headers.origin = 'https://front-end-chat-app-ngocnamk3er-gmailcom.vercel.app'; // Thay thế bằng nguồn (origin) mà bạn muốn cho phép truy cập
-    next();
+const io = require("socket.io")(server, {
+    pingTimeout: 60000,
+    cors: {
+        origin: "http://localhost:3000",
+        // credentials: true,
+    },
 });
 
 io.on("connection", (socket) => {
